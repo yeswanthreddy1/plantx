@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 # Optional model import depending on environment
 try:
     from tensorflow.keras.models import load_model
+    import numpy as np
     from utils import preprocess_image
     TENSORFLOW_AVAILABLE = True
 except ImportError:
