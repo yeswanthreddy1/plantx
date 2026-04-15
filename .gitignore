@@ -1,0 +1,18 @@
+# Virtual Environments
+venv/
+env/
+ENV/
+.env
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Dataset and Models (to save bandwidth/repo space)
+dataset/
+*.h5
+
+# OS generated files
+.DS_Store
+Thumbs.db
