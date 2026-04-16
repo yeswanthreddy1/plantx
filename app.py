@@ -84,9 +84,13 @@ def predict():
             predicted_class = class_names[predicted_idx]
 
         else:
-            # DEMO MODE — simulate prediction
-            predicted_class = random.choice(demo_classes)
-            confidence = round(random.uniform(72.0, 99.5), 2)
+            # DEMO MODE — use filename hash so same image = same result every time
+            import hashlib
+            file_bytes = file.read()
+            seed = int(hashlib.md5(file_bytes).hexdigest(), 16) % (10**8)
+            rng = random.Random(seed)
+            predicted_class = rng.choice(demo_classes)
+            confidence = round(rng.uniform(82.0, 99.5), 2)
 
         # Get treatment suggestion
         treatment = get_treatment(predicted_class)
