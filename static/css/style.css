@@ -94,11 +94,36 @@ header p {
     color: var(--text-main);
 }
 
-.landing-content p {
+.hero-subtitle {
     font-size: 1.2rem;
     color: var(--text-muted);
     line-height: 1.6;
     margin-bottom: 2rem;
+}
+
+.tech-stack {
+    text-align: left;
+    background: rgba(46, 204, 113, 0.05);
+    border: 1px solid var(--card-border);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+    backdrop-filter: blur(8px);
+}
+
+.tech-stack p {
+    font-size: 1.05rem;
+    color: var(--text-main);
+    margin-bottom: 0.8rem;
+}
+
+.tech-stack p:last-child {
+    margin-bottom: 0;
+}
+
+.tech-stack i {
+    color: var(--primary-color);
+    width: 25px;
 }
 
 .btn-xl {
