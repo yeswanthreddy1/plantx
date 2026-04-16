@@ -22,7 +22,7 @@ body {
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     position: relative;
     overflow-x: hidden;
@@ -39,17 +39,20 @@ body {
     z-index: -1;
 }
 
-.container {
+.app-wrapper {
     width: 100%;
-    max-width: 600px;
+    max-width: 1200px;
     padding: 2rem;
     position: relative;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
 }
 
 .logo {
@@ -71,8 +74,57 @@ header p {
     font-size: 1.1rem;
 }
 
-/* Glassmorphism Cards */
-.upload-card, .results-card {
+/* LANDING SCREEN */
+.landing-screen {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    animation: fadeIn 0.8s ease;
+}
+
+.landing-content {
+    max-width: 600px;
+}
+
+.landing-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.landing-content p {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.btn-xl {
+    font-size: 1.2rem;
+    padding: 16px 36px;
+    border-radius: 50px;
+}
+
+/* APP SPLIT LAYOUT */
+.app-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    width: 100%;
+    flex-grow: 1;
+    animation: slideUp 0.6s ease forwards;
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* BASE GLASS CARDS */
+.glass-card {
     background: var(--card-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -80,15 +132,18 @@ header p {
     border-radius: 20px;
     padding: 2rem;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
+    height: 100%; /* Fill panel */
+    display: flex;
+    flex-direction: column;
 }
 
-/* Drop Zone */
+/* Left Panel UI */
 .drop-zone {
-    max-width: 100%;
-    height: 250px;
+    width: 100%;
+    min-height: 350px;
     padding: 25px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -97,6 +152,7 @@ header p {
     border-radius: 15px;
     transition: all 0.3s ease;
     background: rgba(46, 204, 113, 0.05);
+    flex-grow: 1;
 }
 
 .drop-zone--over {
@@ -124,20 +180,23 @@ header p {
     font-weight: 600;
 }
 
-/* Preview Area */
+/* Preview Image Area */
 .preview-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
+    flex-grow: 1;
+    justify-content: center;
 }
 
 #image-preview {
     max-width: 100%;
-    max-height: 300px;
+    max-height: 400px;
     border-radius: 12px;
     border: 2px solid var(--card-border);
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    object-fit: contain;
 }
 
 .preview-actions {
@@ -146,7 +205,7 @@ header p {
     width: 100%;
 }
 
-/* Buttons */
+/* Generic Buttons */
 .btn {
     padding: 12px 24px;
     border-radius: 8px;
@@ -184,7 +243,7 @@ header p {
     border: 2px solid var(--primary-color);
     color: var(--primary-color);
     width: 100%;
-    margin-top: 1.5rem;
+    margin-top: auto;
 }
 
 .btn-outline:hover {
@@ -192,10 +251,31 @@ header p {
     color: #111;
 }
 
+/* Right Panel UI Elements */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-grow: 1;
+    color: var(--text-muted);
+}
+
+.icon-muted {
+    font-size: 3rem;
+    opacity: 0.2;
+    margin-bottom: 1rem;
+}
+
 /* Loader */
 .loader-container {
-    text-align: center;
-    padding: 3rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
 }
 
 .spinner {
@@ -205,7 +285,7 @@ header p {
     border-left-color: var(--primary-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    margin: 0 auto 1.5rem auto;
+    margin-bottom: 1.5rem;
 }
 
 @keyframes spin {
@@ -213,7 +293,6 @@ header p {
 }
 
 .loader-container p {
-    color: var(--text-primary);
     font-weight: 500;
     animation: pulse 1.5s infinite;
 }
@@ -224,9 +303,12 @@ header p {
     100% { opacity: 0.6; }
 }
 
-/* Results Card */
-.results-card {
-    border-top: 4px solid var(--primary-color);
+/* Results Formatting */
+.results-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    animation: fadeIn 0.6s ease;
 }
 
 .result-header h2 {
@@ -241,6 +323,7 @@ header p {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .disease-info h3, .confidence-info h3, .treatment-info h3 {
@@ -290,33 +373,35 @@ header p {
     line-height: 1.6;
 }
 
-.hidden {
-    display: none !important;
-}
-
 .error-banner {
     background-color: rgba(239, 68, 68, 0.1);
     border: 1px solid var(--danger);
     color: #fca5a5;
     padding: 1rem;
     border-radius: 10px;
-    margin-top: 1.5rem;
+    margin-top: auto;
     text-align: center;
+}
+
+.hidden {
+    display: none !important;
 }
 
 footer {
     text-align: center;
-    margin-top: 3rem;
+    padding-top: 2rem;
+    margin-top: auto;
     color: var(--text-muted);
     font-size: 0.9rem;
 }
 
-/* Animations */
+/* Base Animations */
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.results-card:not(.hidden) {
-    animation: slideUp 0.5s ease forwards;
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

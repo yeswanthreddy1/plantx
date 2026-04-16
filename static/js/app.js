@@ -1,23 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Elements
+    // Top-Level Screens
+    const landingScreen = document.getElementById('landing-screen');
+    const appContainer = document.getElementById('app-container');
+    const btnGetStarted = document.getElementById('btn-get-started');
+
+    // Left Panel Elements (Upload & Preview)
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input');
     const previewContainer = document.getElementById('preview-container');
     const imagePreview = document.getElementById('image-preview');
     const btnRemove = document.getElementById('btn-remove');
     const btnAnalyze = document.getElementById('btn-analyze');
-    const loader = document.getElementById('loader');
-    const resultsCard = document.getElementById('results-card');
-    const errorBanner = document.getElementById('error-banner');
-    const btnNewScan = document.getElementById('btn-new-scan');
 
-    // Result Elements
+    // Right Panel Elements (Analysis & Results)
+    const emptyState = document.getElementById('empty-state');
+    const loader = document.getElementById('loader');
+    const resultsContent = document.getElementById('results-content');
+    const errorBanner = document.getElementById('error-banner');
+    
+    // Result Data Elements
     const diseaseName = document.getElementById('disease-name');
     const confidenceFill = document.getElementById('confidence-fill');
     const confidenceText = document.getElementById('confidence-text');
     const treatmentText = document.getElementById('treatment-text');
+    const btnNewScan = document.getElementById('btn-new-scan');
 
     let currentFile = null;
+
+    // --- State Management --- 
+
+    function resetRightPanel() {
+        emptyState.classList.remove('hidden');
+        loader.classList.add('hidden');
+        resultsContent.classList.add('hidden');
+        hideError();
+    }
+
+    // --- Get Started Transition ---
+    btnGetStarted.addEventListener('click', () => {
+        landingScreen.classList.add('hidden');
+        appContainer.classList.remove('hidden');
+    });
 
     // --- Drag and Drop functionality ---
 
@@ -59,16 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         currentFile = file;
-        hideError();
+        resetRightPanel(); // Clear previous results when new file is uploaded
         
-        // Show preview
+        // Show preview on the left panel
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
             imagePreview.src = reader.result;
             dropZone.classList.add('hidden');
             previewContainer.classList.remove('hidden');
-            resultsCard.classList.add('hidden');
         };
     }
 
@@ -77,8 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fileInput.value = '';
         previewContainer.classList.add('hidden');
         dropZone.classList.remove('hidden');
-        resultsCard.classList.add('hidden');
-        hideError();
+        resetRightPanel(); // Go back to original empty state on right
     });
 
     btnNewScan.addEventListener('click', () => {
@@ -90,10 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
     btnAnalyze.addEventListener('click', async () => {
         if (!currentFile) return;
 
-        // UI State: Loading
-        previewContainer.classList.add('hidden');
+        // UI State: Right Panel Loading (Left panel stays with image preview!)
+        emptyState.classList.add('hidden');
+        resultsContent.classList.add('hidden');
         loader.classList.remove('hidden');
-        resultsCard.classList.add('hidden');
         hideError();
 
         // Prepare FormData
@@ -113,20 +134,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.error || 'Something went wrong during prediction.');
             }
 
-            // UI State: Success
+            // UI State: Right Panel Success
             displayResults(data);
 
         } catch (err) {
-            // UI State: Error
+            // UI State: Right Panel Error
             loader.classList.add('hidden');
-            previewContainer.classList.remove('hidden');
+            emptyState.classList.remove('hidden'); // Fallback purely visual
             showError(err.message);
         }
     });
 
     function displayResults(data) {
         loader.classList.add('hidden');
-        resultsCard.classList.remove('hidden');
+        resultsContent.classList.remove('hidden');
 
         diseaseName.textContent = data.disease;
         treatmentText.textContent = data.treatment;
